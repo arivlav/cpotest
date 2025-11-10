@@ -26,7 +26,6 @@ return new class extends Migration
             $table->enum('status', TaskStatusService::getStatusList())->default('planned');
             $table->date('finished_at')->nullable();
             $table->foreignId('user_id')->constrained();
-            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

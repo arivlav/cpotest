@@ -20,14 +20,19 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (ValidationException $e, Request $request) {
+        $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
+            return new ApiErrorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, $e);
+        });
+        $exceptions->render(function (ValidationException $e) {
             $errorMessage = array_map(function($errors) {
                 return implode("; ", $errors);
             }, $e->errors());
             return new ApiErrorResponse(implode("; ", $errorMessage), Response::HTTP_UNPROCESSABLE_ENTITY, $e);
         });
 
-        $exceptions->render(function (HttpException $e, Request $request) {
-            return new ApiErrorResponse($e->getMessage(), $e->getCode(), $e);
+        $exceptions->render(function (HttpException $e) {
+            return new ApiErrorResponse($e->getMessage(), $e->getStatusCode(), $e);
         });
+
+
     })->create();

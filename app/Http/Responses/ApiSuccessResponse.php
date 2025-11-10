@@ -12,7 +12,9 @@ readonly class ApiSuccessResponse implements Responsable
         private mixed $data,
         private int   $code = Response::HTTP_OK,
         private array $headers = []
-    ) {}
+    )
+    {
+    }
 
     public function toResponse($request): ResourceResponse|Response
     {
