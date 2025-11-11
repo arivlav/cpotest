@@ -30,10 +30,10 @@ class CreateTaskAction
         $newTask->description = $dto->description;
         $newTask->status = TaskStatusType::PLANNED->value;
         $newTask->user_id = auth()->id();
+        $newTask->save();
         if ($request->hasFile('file')) {
             $newTask->addMediaFromRequest('file')->toMediaCollection('tasks');
         }
-        $newTask->save();
         return $newTask;
     }
 }
